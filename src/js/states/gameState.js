@@ -44,7 +44,7 @@ states.game = {
         
 
     },
-    
+  
     draw: function(dt){
         renderTarget = SCREEN;
         pat = dither[8];
@@ -77,6 +77,13 @@ states.game = {
         } //end map draw loop
 
         player.draw();
+        renderTarget = EFFECTS;
+        clear(0);
+        fillRect(0,0,WIDTH,HEIGHT,1,3);
+        pat = dither[8];
+        fillCircle(128,128,128,3,4);
+        fillCircle(128,128,100,4,5);
+        fillCircle(128,128,64,5,6);
     }
 
 

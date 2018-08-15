@@ -4,7 +4,7 @@
 states = {};
 
 init = () => {
-  //drawThings();
+  drawThings();
   //stats = new Stats();
   //stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
   //document.body.appendChild( stats.dom );
@@ -93,6 +93,8 @@ window.addEventListener('focus', function (event) {
   paused = false;
 }, false);
 
+
+
 loop = e => {
   //stats.begin();
 
@@ -129,34 +131,38 @@ loop = e => {
   requestAnimationFrame(loop);
 }
 
-// drawThings = e => {
-//   renderTarget = SPRITES;
-//   clear(0);
-//   pat=dither[0];
-//   moveTo(0,0);
-//   fillCircle(0,0,4,1,1);
-//   fillRect(0,0,1,1,1,1);
-//   rect(0,0,1,1,1,1);
-//   pset([2,2]);
-//   line(0,0,1,1,1,1);
-//   cRect(0,0,1,1,1,1,1);
-//   checker(2,2,2,2,2,2,2,2);
-//   circle(1,1,2,1,1);
-//   triangle(0,1,0,1,0,1,1,1);
-//   ellipse(1,1,2,2,1,1);
-//   floodFill(0,1,1,SPRITES);
-//   spr(0,0,0,0,0,0,0,1);
-//   rspr(0,0,0,0,0,0,0,0);
-//   sspr(0,0,0,0,0,0,0,0);
-//   outline(SPRITES,SPRITES,1,2,3,4);
+drawThings = e => { //hit all the api once to check true size with no dead functions
+   renderTarget = UI;
+   clear(0);
+   pat=dither[0];
+   moveTo(0,0);
+   fillCircle(0,0,4,1,1);
+   fillRect(0,0,16,16,22,22);
+   rect(0,0,1,1,1,1);
+   pset(2,2);
+   line(0,0,1,1,1,1);
+   cRect(0,0,1,1,1,1,1);
+   checker(2,2,2,2,2,2,2,2);
+   circle(1,1,2,1,1);
+   triangle(0,1,0,1,0,1,1,1);
+   ellipse(1,1,2,2,1,1);
+   floodFill(2,2,UI);
+   spr(0,0,0,0,0,0,0,1);
+   rspr(0,0,0,0,0,0,0,0);
+   sspr(0,0,0,0,0,0,0,0);
+   outline(UI,UI,1,2,3,4);
+   setColors(22,0);
+   clear(0);
+   renderTarget = SCREEN;
+  
 
-// }
+}
 
 drawMap = e => {
   renderTarget = COLLISION;
   setColors(1,1);
   rect(0,0,WIDTH,HEIGHT, 1);
-  for(let i = 0; i < 600; i++){
+  for(let i = 0; i < 6000; i++){
     pset(lcg.nextIntRange(1, WIDTH), lcg.nextIntRange(1, HEIGHT));
   }
   renderTarget = SCREEN;

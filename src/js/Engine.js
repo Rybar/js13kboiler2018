@@ -1,13 +1,13 @@
 //--------------Engine.js-------------------
 
-const WIDTH =     320;
-const HEIGHT =    180;
+const WIDTH =     256;
+const HEIGHT =    256;
 const PAGES =     10;  //page = 1 screen HEIGHTxWIDTH worth of screenbuffer.
 const PAGESIZE = WIDTH*HEIGHT;
 
 const SCREEN = 0;
-const BUFFER = PAGESIZE;
-const BUFFER2 = PAGESIZE*2;
+const EFFECTS = PAGESIZE;
+const BUFFER = PAGESIZE*2;
 const BACKGROUND = PAGESIZE*3;
 const MIDGROUND = PAGESIZE*4;
 const FOREGROUND = PAGESIZE*5;
@@ -83,9 +83,11 @@ palDefault = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,2
 
 var
 c =               document.getElementById('canvas'),
+c2 =              document.createElement("canvas"),
+ctx2 =            c2.getContext('2d'),
 ctx =             c.getContext('2d'),
 renderTarget =    0x00000,
-renderSource =    PAGESIZE, //buffer is ahead one screen's worth of pixels
+renderSource =    BUFFER, //buffer is ahead one screen's worth of pixels
 
 //Adigun Azikiwe Polack's AAP64 Palette.
 //ofcourse you can change this to whatever you like, up to 256 colors.
@@ -178,6 +180,14 @@ buf =             new ArrayBuffer(imageData.data.length),
 buf8 =            new Uint8Array(buf),
 data =            new Uint32Array(buf),
 ram =             new Uint8Array(WIDTH * HEIGHT * PAGES);
+
+c2.width = WIDTH;
+c2.height = HEIGHT;
+var imageData2 =   ctx2.getImageData(0, 0, WIDTH, HEIGHT),
+buf2 =             new ArrayBuffer(imageData.data.length),
+buf82 =            new Uint8Array(buf),
+data2 =            new Uint32Array(buf),
+
 audioCtx = new AudioContext;
 
 //--------------graphics functions----------------
@@ -804,7 +814,7 @@ function lineTo(x,y, color=cursorColor, color2 = cursorColor2){
 
 function render() {
 
-  var i = PAGESIZE;  // display is first page of ram
+  let i = PAGESIZE;  // display is first page of ram
 
   while (i--) {
     /*
@@ -814,11 +824,22 @@ function render() {
     data[i] = colors[pal[ram[i]]];
 
   }
-
   imageData.data.set(buf8);
 
   ctx.putImageData(imageData, 0, 0);
 
+  renderEffects();
+  ctx.globalCompositeOperation = 'overlay';
+  ctx.drawImage(c2, 0, 0);
+}
+
+function renderEffects() {
+  let i = PAGESIZE;
+  while(i--){
+    data2[i] = colors[pal[ram[i+PAGESIZE]]];
+  }
+  imageData2.data.set(buf82);
+  ctx2.putImageData(imageData2, 0, 0);
 }
 
 //-----------txt.js----------------
